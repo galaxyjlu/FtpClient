@@ -2,13 +2,13 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client{
+public class Client_{
 
     private Socket socket;
     private int port;
     private String IP;
     private String FilePath="E:/ND/";
-    Client(Socket socket){
+    Client_(Socket socket){
         setSocket(socket);
     }
 
@@ -105,7 +105,7 @@ public class Client{
     public static void main(String[] args) {
         try{
             Socket socket=new Socket("localhost",8080);
-            Client client=new Client(socket);
+            Client_ client=new Client_(socket);
             Scanner scanner=new Scanner(System.in);
             System.out.println("INPUT COMMAD PLZ");
             String cmd=scanner.nextLine();
