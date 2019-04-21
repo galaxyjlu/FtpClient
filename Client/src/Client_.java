@@ -7,7 +7,7 @@ public class Client_{
     private Socket socket;
     private int port;
     private String IP;
-    private String FilePath="E:/ND/";
+    private String FilePath="C:\\Users\\lizer\\IdeaProjects\\FtpClient\\Client\\src\\";
     Client_(Socket socket){
         setSocket(socket);
     }
@@ -23,16 +23,17 @@ public class Client_{
     public void send(String cmd) throws IOException {
         OutputStream os=getSocket().getOutputStream();
         PrintWriter pw=new PrintWriter(os);
-        pw.write(cmd);
+        pw.write(cmd + "\n");
         pw.flush();
-        pw.close();
-        os.close();
+        //pw.close();
+        //os.close();
         System.out.println("COMMAND HAS BEEN SENT SUCCESS");
     }
 
     public void Upload(String filename) throws IOException {
         send("UPLD "+filename);
-        File file=new File(this.FilePath,filename);
+        System.out.println(filename);
+        File file=new File(this.FilePath + filename);
         FileInputStream fis=new FileInputStream(file);
         DataOutputStream dos=new DataOutputStream(getSocket().getOutputStream());
         byte[] bytes=new byte[1024];
@@ -48,7 +49,7 @@ public class Client_{
 
     public void Dowanload(String filename) throws IOException {
         send("DWLD "+filename);
-        File file=new File(this.FilePath,filename);
+        File file=new File(this.FilePath, filename);
 
         FileOutputStream fos=new FileOutputStream(file,true);
         DataInputStream dis=new DataInputStream(getSocket().getInputStream());
@@ -56,8 +57,8 @@ public class Client_{
         int len=0;
         while((len=dis.read(bytes,0,bytes.length))!=-1){
             fos.write(bytes,0,len);
-            fos.flush();
         }
+        fos.flush();
         fos.close();
         dis.close();
         System.out.println("Succuss Download");
@@ -71,7 +72,7 @@ public class Client_{
         String temp=null;
         String info="";
         while((temp=br.readLine())!=null){
-            info+=temp;
+            info+=temp + "\n";
         }
         if(info.equals("")){
             System.out.println("FAIL GET LIST ALL");
@@ -86,9 +87,9 @@ public class Client_{
     public void Execute(String cmd) throws IOException {
         String upld="UPLD";
         String dwld="DWLD";
-        String list="LISTALL";
+        String list="LIST";
         String[] temp=cmd.split(" ");
-        if(temp[0].equals(upld)){
+        if(temp[0].equalsIgnoreCase(upld)){
             if(temp.length>1) {
                 Upload(temp[1]);
             }
@@ -111,6 +112,7 @@ public class Client_{
             String cmd=scanner.nextLine();
             client.Execute(cmd);
         }catch (Exception e){
+            e.printStackTrace();
             System.out.println("FAIL...");
         }
 
